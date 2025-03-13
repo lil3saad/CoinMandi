@@ -1,2 +1,2 @@
 /build
-/com/example/coinmandi/core/sensitive
+app/src/main/java/com/example/coinmandi/core/sensitive/GekoRoutes.kt
