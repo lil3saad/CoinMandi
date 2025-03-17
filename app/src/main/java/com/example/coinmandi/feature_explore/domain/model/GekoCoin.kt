@@ -46,7 +46,6 @@ data class GekoCoin(    val id: String? = null ,
     val atlChangePercentage: Double? = null,
     @SerialName("atl_date")
     val atlDate: String? = null,
-//    val roi: String? = null,
     @SerialName("last_updated")
     val lastUpdated: String? = null,
 )

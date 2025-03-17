@@ -8,6 +8,7 @@ import com.example.coinmandi.feature_explore.data.repositories.ExploreRepo
 import com.example.coinmandi.feature_explore.domain.RepoImplementation
 import com.example.coinmandi.feature_explore.domain.usecases.GetCoinsUC
 import com.example.coinmandi.feature_explore.domain.usecases.GetTrendingListUC
+import com.example.coinmandi.feature_explore.domain.usecases.SearchCoinUC
 import com.example.coinmandi.feature_explore.presentation.viewmodels.ExploreViewModel
 import com.example.coinmandi.feature_home.domain.GetCMuserUsecase
 import com.example.coinmandi.feature_home.presentation.HomeViewModel
@@ -97,10 +98,16 @@ val exploreModule = module{
             get()
         )
     }
+    single{
+        SearchCoinUC(
+            get()
+        )
+    }
       viewModel {
           ExploreViewModel(
                get(),
-               get()
+               get(),
+              get()
           )
       }
 }

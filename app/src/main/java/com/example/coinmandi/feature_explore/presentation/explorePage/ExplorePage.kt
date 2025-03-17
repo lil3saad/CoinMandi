@@ -19,14 +19,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,7 +35,6 @@ import androidx.navigation.NavHostController
 import com.example.coinmandi.core.presentation.CoreViewModel
 import com.example.coinmandi.feature_explore.presentation.viewmodels.ExploreViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -45,12 +44,13 @@ import com.example.coinmandi.core.presentation.navigation.CoreDestinations
 import com.example.coinmandi.core.presentation.states.CorePageState
 import com.example.coinmandi.feature_explore.presentation.explorePage.components.CategoryListBox
 import com.example.coinmandi.feature_explore.presentation.explorePage.components.CategoryMenu
-import com.example.coinmandi.feature_explore.presentation.explorePage.components.ExplorePageSearchBar
 import com.example.coinmandi.feature_explore.presentation.explorePage.components.TrendingCoins
+import com.example.coinmandi.feature_explore.presentation.navigation.ExploreDestinations
 import com.example.coinmandi.feature_explore.presentation.states.ExplorePageState
 import com.example.coinmandi.feature_explore.presentation.states.SelectedCategoryState
 import com.example.coinmandi.ui.theme.BrandColor
 import com.example.coinmandi.ui.theme.HeadingFont
+import com.example.coinmandi.ui.theme.Typography
 
 @Composable
 fun ExplorePage(modifier: Modifier = Modifier ,
@@ -115,10 +115,23 @@ fun ExplorePageContent(modifier: Modifier = Modifier,
 ){
     Column(modifier = modifier ,
         horizontalAlignment = Alignment.CenterHorizontally){
-        var searchtext = remember { mutableStateOf("") }
-        ExplorePageSearchBar(searchText = searchtext,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp)
-        )
+
+        Row(modifier = Modifier.fillMaxWidth()
+            .padding(horizontal = 25.dp),
+             horizontalArrangement = Arrangement.SpaceBetween ,
+            verticalAlignment = Alignment.CenterVertically) {
+             Text("Explore" , style = Typography.titleMedium)
+            IconButton(onClick = {
+                    navcontroller.navigate(ExploreDestinations.SearchPage)
+                }
+            ){
+              Icon(imageVector = Icons.Default.Search ,
+                  contentDescription = "Search Button",
+                  tint = Color.White,
+                  modifier = Modifier.size(32.dp)
+              )
+            }
+        }
         TrendingCoins(modifier = Modifier,
             pagestate = pageState
         )
@@ -129,8 +142,8 @@ fun ExplorePageContent(modifier: Modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically ){
             Text(text =  if( pageState.SelectedCategory != null)
                 pageState.SelectedCategory.catergoryname
-                 else "RWA",
-                style = TextStyle(color = Color.White , fontSize = 25.sp , fontFamily = HeadingFont , fontWeight = FontWeight.ExtraBold)
+                 else "Rwa",
+                style = Typography.titleSmall
             )
             Icon(imageVector = if( pageState.IsCateogoryMenuVisible ) Icons.Default.Close
                 else Icons.Default.ArrowDropDown,

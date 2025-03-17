@@ -13,6 +13,7 @@ import com.example.coinmandi.feature_aibot.presentation.aibotScreen.AiBotPage
 import com.example.coinmandi.feature_aibot.presentation.navigation.AiBothDestinations
 import com.example.coinmandi.feature_explore.presentation.explorePage.ExplorePage
 import com.example.coinmandi.feature_explore.presentation.navigation.ExploreDestinations
+import com.example.coinmandi.feature_explore.presentation.searchpage.SearchPage
 import com.example.coinmandi.feature_useronboard.presentation.viewmodels.UserAuthViewModel
 import com.example.coinmandi.feature_home.presentation.HomePage
 import com.example.coinmandi.feature_home.presentation.navigation.HomeDestinations
@@ -51,6 +52,9 @@ fun NavGraphBuilder.CoreNavGraph(
                 navcontroller = navcontroller,
                 coreViewModel = coreviewmodel
             )
+        }
+        composable<ExploreDestinations.SearchPage> {
+            SearchPage(modifier = modifier)
         }
     }
     navigation<CoreDestinations.AIBotNavGraph>(

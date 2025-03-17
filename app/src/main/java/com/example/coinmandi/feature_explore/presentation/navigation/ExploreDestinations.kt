@@ -5,4 +5,6 @@ import kotlinx.serialization.Serializable
 sealed class ExploreDestinations {
    @Serializable
    class ExplorePage : ExploreDestinations()
+   @Serializable
+   object SearchPage : ExploreDestinations()
 }
