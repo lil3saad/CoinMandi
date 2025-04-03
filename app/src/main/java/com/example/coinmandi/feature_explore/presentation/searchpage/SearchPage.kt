@@ -36,14 +36,12 @@ import com.example.coinmandi.ui.theme.BrandColor
 import com.example.coinmandi.ui.theme.Typography
 import org.koin.compose.viewmodel.koinViewModel
 import com.example.coinmandi.R
-import com.example.coinmandi.core.presentation.components.LocalWindowType
-import com.example.coinmandi.core.presentation.components.WindowType
+
 
 @Composable()
 fun SearchPage(modifier: Modifier = Modifier,
                featurevm : ExploreViewModel = koinViewModel<ExploreViewModel>()
 ){
-    val windowtype = LocalWindowType.current
     val pagestate by featurevm.PageState
     val searchResult by featurevm.searchResult.collectAsState()
     val coinlist = searchResult.SearchResultList

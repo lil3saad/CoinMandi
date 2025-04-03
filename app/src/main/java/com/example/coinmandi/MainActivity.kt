@@ -5,29 +5,21 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.coinmandi.core.presentation.CoreViewModel
-import com.example.coinmandi.core.presentation.components.BottomNavBar
 import com.example.coinmandi.ui.theme.AppBg
-import com.example.coinmandi.feature_useronboard.presentation.navigation.AuthNavDestinations
+import com.example.coinmandi.userAuthentication.presentation.navigation.AuthNavDestinations
 import com.example.coinmandi.ui.theme.CoinMandiTheme
-import com.example.coinmandi.feature_useronboard.presentation.navigation.UseronBoardingGrpah
-import com.example.coinmandi.feature_useronboard.presentation.viewmodels.UserAuthViewModel
+import com.example.coinmandi.userAuthentication.presentation.navigation.UseronBoardingGrpah
+import com.example.coinmandi.userAuthentication.presentation.viewmodels.UserAuthViewModel
 import com.example.coinmandi.core.presentation.navigation.CoreDestinations
 import com.example.coinmandi.core.presentation.navigation.CoreNavGraph
-import com.example.coinmandi.core.presentation.states.CorePageState
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class MainActivity : ComponentActivity() {

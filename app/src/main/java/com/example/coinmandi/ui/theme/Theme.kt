@@ -11,8 +11,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
-import com.example.coinmandi.core.presentation.components.LocalWindowType
-import com.example.coinmandi.core.presentation.components.rememeberWindowSize
+
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -42,6 +41,7 @@ fun CoinMandiTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current

@@ -36,10 +36,8 @@ import com.example.coinmandi.core.presentation.CoreViewModel
 import com.example.coinmandi.feature_explore.presentation.viewmodels.ExploreViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import com.example.coinmandi.core.presentation.components.BottomNavBar
+import com.example.coinmandi.core.feature_coindetail.navigation.CoinDetailDestinations
 import com.example.coinmandi.core.presentation.navigation.CoreDestinations
 import com.example.coinmandi.core.presentation.states.CorePageState
 import com.example.coinmandi.feature_explore.presentation.explorePage.components.CategoryListBox
@@ -49,7 +47,6 @@ import com.example.coinmandi.feature_explore.presentation.navigation.ExploreDest
 import com.example.coinmandi.feature_explore.presentation.states.ExplorePageState
 import com.example.coinmandi.feature_explore.presentation.states.SelectedCategoryState
 import com.example.coinmandi.ui.theme.BrandColor
-import com.example.coinmandi.ui.theme.HeadingFont
 import com.example.coinmandi.ui.theme.Typography
 
 @Composable
@@ -116,10 +113,12 @@ fun ExplorePageContent(modifier: Modifier = Modifier,
     Column(modifier = modifier ,
         horizontalAlignment = Alignment.CenterHorizontally){
 
+        // Header
         Row(modifier = Modifier.fillMaxWidth()
             .padding(horizontal = 25.dp),
              horizontalArrangement = Arrangement.SpaceBetween ,
             verticalAlignment = Alignment.CenterVertically) {
+
              Text("Explore" , style = Typography.titleMedium)
             IconButton(onClick = {
                     navcontroller.navigate(ExploreDestinations.SearchPage)
@@ -132,9 +131,11 @@ fun ExplorePageContent(modifier: Modifier = Modifier,
               )
             }
         }
+
         TrendingCoins(modifier = Modifier,
             pagestate = pageState
         )
+
         // Category Row
         Row(modifier = Modifier.fillMaxWidth()
             .padding(horizontal = 20.dp , vertical = 5.dp),
@@ -157,6 +158,8 @@ fun ExplorePageContent(modifier: Modifier = Modifier,
                     }
             )
         }
+
+        // Category Drop Down
         AnimatedVisibility(visible =  pageState.IsCateogoryMenuVisible ,
             enter = fadeIn() + slideInVertically(),
             exit = fadeOut() + slideOutVertically(), // What is This EnterTransition,
@@ -166,8 +169,12 @@ fun ExplorePageContent(modifier: Modifier = Modifier,
                 pagestate = pageState
             )
         }
+
         CategoryListBox(modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-           state = pageState
+           state = pageState,
+            opencard = { coinid ->
+                navcontroller.navigate(CoinDetailDestinations.CoinDetailPage(coinid))
+            }
         )
     }
 }

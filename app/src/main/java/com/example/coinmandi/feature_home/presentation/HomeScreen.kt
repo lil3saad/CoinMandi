@@ -25,8 +25,8 @@ import com.example.coinmandi.core.presentation.CoreViewModel
 import com.example.coinmandi.core.presentation.components.BottomNavBar
 import com.example.coinmandi.feature_home.presentation.state.HomePageEvents
 import com.example.coinmandi.feature_home.presentation.state.HomePageState
-import com.example.coinmandi.feature_useronboard.domain.model.CoinMandiUser
-import com.example.coinmandi.feature_useronboard.presentation.viewmodels.UserAuthViewModel
+import com.example.coinmandi.userAuthentication.domain.model.CoinMandiUser
+import com.example.coinmandi.userAuthentication.presentation.viewmodels.UserAuthViewModel
 import com.example.coinmandi.core.presentation.navigation.CoreDestinations
 import com.example.coinmandi.core.presentation.states.CorePageState
 import org.koin.compose.viewmodel.koinViewModel

@@ -1,6 +1,7 @@
 package com.example.coinmandi
 
 import android.app.Application
+import com.example.coinmandi.dependencyinjection.coindetailModule
 import com.example.coinmandi.dependencyinjection.auth_featureModule
 import com.example.coinmandi.dependencyinjection.coreModule
 import com.example.coinmandi.dependencyinjection.exploreModule
@@ -14,7 +15,9 @@ class MyApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(applicationContext)
-            modules(auth_featureModule , homefeatureModule , coreModule , exploreModule)
+            modules(auth_featureModule , homefeatureModule , coreModule , exploreModule ,
+                coindetailModule
+            )
             androidLogger()
         }
     }

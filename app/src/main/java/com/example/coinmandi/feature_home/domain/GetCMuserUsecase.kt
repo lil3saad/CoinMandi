@@ -2,7 +2,7 @@ package com.example.coinmandi.feature_home.domain
 
 import android.util.Log
 import com.example.coinmandi.feature_home.presentation.state.HomePageState
-import com.example.coinmandi.feature_useronboard.domain.model.CoinMandiUser
+import com.example.coinmandi.userAuthentication.domain.model.CoinMandiUser
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

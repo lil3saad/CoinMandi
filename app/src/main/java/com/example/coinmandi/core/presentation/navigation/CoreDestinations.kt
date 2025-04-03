@@ -12,6 +12,8 @@ sealed class CoreDestinations {
     @Serializable
     object ExploreNavGraph : CoreDestinations()
     @Serializable
+    object CoinDetailNavGrap : CoreDestinations()
+    @Serializable
     object AIBotNavGraph : CoreDestinations()
     @Serializable
     object UserProfileNavGraph : CoreDestinations()

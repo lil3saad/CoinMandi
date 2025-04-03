@@ -14,9 +14,8 @@ import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
 
 // This Could be Service Implementation
-class GekoService(
-     val  client : HttpClient
-) {
+class GekoService(val  client : HttpClient){
+
     suspend inline fun <reified D>  Get(
         endpoint : String,
         params : Map<String, Any>?,
@@ -34,7 +33,6 @@ class GekoService(
             }
         }
     }
-
     suspend inline fun <reified D> SafeCall(
         execute : () -> HttpResponse
     )  : GekoResult<D, GekoError> {
@@ -46,7 +44,7 @@ class GekoService(
                 error = GekoErrorWithCodeMessage(
                     code = null,
                     error = GekoError.LocalError.INTERNET_ERROR,
-                    message = "No Internet Found"
+                    message = "Could Not connect to Internet"
                 )
             )
         } catch(e : SerializationException){
@@ -55,7 +53,7 @@ class GekoService(
                 error = GekoErrorWithCodeMessage(
                     code = null,
                     error = GekoError.LocalError.SERIALIZATION_ERROR,
-                    message = "No Internet Found"
+                    message = "Error During Serialization of objects"
                 )
             )
         } catch (e : Exception){
@@ -64,7 +62,7 @@ class GekoService(
                 error = GekoErrorWithCodeMessage(
                     code = null,
                     error = GekoError.LocalError.UNKNOWN,
-                    message = "Error Fetching From Data"
+                    message = "${e.message}"
                 )
             )
         }
@@ -93,7 +91,7 @@ class GekoService(
                    error = GekoErrorWithCodeMessage(
                        code = response.status.value,
                        error = GekoError.RemoteError.CLIENT_ERROR,
-                       message = "Error Please Try Again"
+                       message = "Error from Client , Try Again"
                    )
                )
            }
@@ -111,7 +109,7 @@ class GekoService(
                    error = GekoErrorWithCodeMessage(
                        code = null,
                        error = GekoError.RemoteError.UNKNOWN,
-                       message = "Error Fetching From DataBase"
+                       message = "Error Fetching From Sever"
                    )
                )
            }

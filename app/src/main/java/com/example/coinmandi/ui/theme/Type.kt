@@ -26,13 +26,6 @@ val creativefont3 = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    ),
     titleLarge = TextStyle(
         fontFamily = HeadingFont,
         fontWeight = FontWeight.Bold,
@@ -49,6 +42,24 @@ val Typography = Typography(
         fontFamily = HeadingFont,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp ,
+        color = Color.White
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = BodyFont,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp ,
+        color = Color.White
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = BodyFont,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp ,
+        color = Color.White
+    ),
+    bodySmall = TextStyle(
+        fontFamily = BodyFont,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp ,
         color = Color.White
     )
 )

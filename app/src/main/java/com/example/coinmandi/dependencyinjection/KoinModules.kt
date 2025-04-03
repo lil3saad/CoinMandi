@@ -1,9 +1,12 @@
 package com.example.coinmandi.dependencyinjection
 
 import androidx.credentials.CredentialManager
+import com.example.coinmandi.core.feature_coindetail.domain.usecases.GetCoinChartData
 import com.example.coinmandi.feature_explore.data.remoteds.CoinGekoApi.GekoService
 import com.example.coinmandi.feature_explore.data.remoteds.CoinGekoApi.KtorClient
 import com.example.coinmandi.core.presentation.CoreViewModel
+import com.example.coinmandi.core.feature_coindetail.domain.usecases.GetCoinDetailsUc
+import com.example.coinmandi.core.feature_coindetail.presentation.viewmodel.CoinDetailViewModel
 import com.example.coinmandi.feature_explore.data.repositories.ExploreRepo
 import com.example.coinmandi.feature_explore.domain.RepoImplementation
 import com.example.coinmandi.feature_explore.domain.usecases.GetCoinsUC
@@ -12,18 +15,19 @@ import com.example.coinmandi.feature_explore.domain.usecases.SearchCoinUC
 import com.example.coinmandi.feature_explore.presentation.viewmodels.ExploreViewModel
 import com.example.coinmandi.feature_home.domain.GetCMuserUsecase
 import com.example.coinmandi.feature_home.presentation.HomeViewModel
-import com.example.coinmandi.feature_useronboard.domain.usecases.FormUseCases
-import com.example.coinmandi.feature_useronboard.domain.usecases.UserAuthUseCase
-import com.example.coinmandi.feature_useronboard.domain.usecases.formusecases.ValidateEmailUc
-import com.example.coinmandi.feature_useronboard.domain.usecases.formusecases.ValidatePasswordUc
-import com.example.coinmandi.feature_useronboard.domain.usecases.formusecases.ValidateRealNameUc
-import com.example.coinmandi.feature_useronboard.domain.usecases.formusecases.ValidateRepeatPass
-import com.example.coinmandi.feature_useronboard.domain.usecases.formusecases.ValidateUserNameUc
-import com.example.coinmandi.feature_useronboard.presentation.viewmodels.UserAuthViewModel
+import com.example.coinmandi.userAuthentication.domain.usecases.FormUseCases
+import com.example.coinmandi.userAuthentication.domain.usecases.UserAuthUseCase
+import com.example.coinmandi.userAuthentication.domain.usecases.formusecases.ValidateEmailUc
+import com.example.coinmandi.userAuthentication.domain.usecases.formusecases.ValidatePasswordUc
+import com.example.coinmandi.userAuthentication.domain.usecases.formusecases.ValidateRealNameUc
+import com.example.coinmandi.userAuthentication.domain.usecases.formusecases.ValidateRepeatPass
+import com.example.coinmandi.userAuthentication.domain.usecases.formusecases.ValidateUserNameUc
+import com.example.coinmandi.userAuthentication.presentation.viewmodels.UserAuthViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+
 import com.google.firebase.firestore.firestore
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -32,6 +36,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val auth_featureModule = module {
+
     single<FirebaseAuth> { Firebase.auth }
     single<FirebaseFirestore> { Firebase.firestore }
     single<CredentialManager> { CredentialManager.create( androidContext() ) }
@@ -110,4 +115,22 @@ val exploreModule = module{
               get()
           )
       }
+}
+val coindetailModule = module {
+    single<GetCoinDetailsUc> {
+        GetCoinDetailsUc(
+            get<ExploreRepo>()
+        )
+    }
+    single<GetCoinChartData> {
+        GetCoinChartData(
+            get<ExploreRepo>()
+        )
+    }
+    viewModel<CoinDetailViewModel> {
+        CoinDetailViewModel(
+               get(),
+            get()
+        )
+    }
 }

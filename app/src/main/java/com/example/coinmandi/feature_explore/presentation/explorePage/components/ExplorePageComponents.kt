@@ -41,6 +41,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +50,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.example.coinmandi.core.presentation.components.UserMessageBox
 import com.example.coinmandi.feature_explore.domain.model.Coin
 import com.example.coinmandi.feature_explore.domain.model.GekoCoin
 import com.example.coinmandi.feature_explore.domain.model.Item
@@ -62,6 +65,7 @@ import com.example.coinmandi.ui.theme.HeadingFont
 import kotlinx.coroutines.launch
 import kotlin.collections.chunked
 import kotlin.collections.forEach
+import com.example.coinmandi.R
 
 
 
@@ -76,8 +80,16 @@ fun TrendingCoins(modifier: Modifier = Modifier,
                 modifier = Modifier.size(50.dp),
                 color = BrandColor
             )
-        }else {
-            if((pagestate.TrendingList != null) && (pagestate.TrendingList.coins != null) && pagestate.TrendingList.coins.isNotEmpty() ){
+        }
+        else if(pagestate.TrendingListMessage != null && pagestate.TrendingListMessage.isNotEmpty()){
+            UserMessageBox(
+                modifier = Modifier.fillMaxWidth(),
+                message = pagestate.TrendingListMessage ,
+                icon = ImageVector.vectorResource(R.drawable.caution),
+                iconmodifier = Modifier.size(45.dp)
+            )
+        }
+        else if((pagestate.TrendingList != null) && (pagestate.TrendingList.coins != null) && pagestate.TrendingList.coins.isNotEmpty() ){
                 Column(modifier = Modifier.fillMaxSize()) {
                     val trendingcoins : List<Coin> = pagestate.TrendingList.coins
                     val scrollState = rememberLazyListState()
@@ -101,16 +113,16 @@ fun TrendingCoins(modifier: Modifier = Modifier,
                                 }
                         }
                     }
-                    Row(modifier = Modifier.padding(bottom = 10.dp)
-                        .fillMaxWidth(),
+                    // Lazy List Indicator
+                    Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         trendingcoins.forEachIndexed{ index , coin ->
                             if(  coin.item.data!=null && coin.item.data.content!= null)
                                 Box(modifier = Modifier
-                                    .padding(4.dp)
-                                    .size(5.dp)
+                                    .padding(horizontal = 4.dp)
+                                    .size(10.dp)
                                     .background(shape = CircleShape, color = if(scrollState.firstVisibleItemIndex == index){
                                         BrandColor
                                     } else Color.White
@@ -119,7 +131,6 @@ fun TrendingCoins(modifier: Modifier = Modifier,
                                         coroutinescope.launch {
                                             scrollState.animateScrollToItem(index)
                                         }
-
                                     }
                                 )
                         }
@@ -128,9 +139,6 @@ fun TrendingCoins(modifier: Modifier = Modifier,
 
             }
         }
-    }
-
-
 }
 
 @Composable
@@ -247,27 +255,36 @@ fun CategoryItem(entry : SelectedCategoryState,
 }
 @Composable
 fun CategoryListBox(modifier: Modifier,
-                    state : ExplorePageState){
+                    state : ExplorePageState ,
+                    opencard: (String) -> Unit){
+
     Box(modifier = modifier,
         contentAlignment = Alignment.Center ){
-        if( (state.CategoryList != null) && state.CategoryList.isNotEmpty() ){
-            if(!state.CategoryListLoading) {
+
+        if(!state.CategoryListLoading) {
+            if( (state.CategoryList != null) && state.CategoryList.isNotEmpty() ){
                 LazyColumn {
                     items(state.CategoryList) { coin ->
                         ExploreCoinCard(
                             coin = coin,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            opencard = opencard
                         )
                     }
                 }
-            }else {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(50.dp),
-                    color = BrandColor
+            }else if (state.CategoryListMessage != null) {
+                UserMessageBox(
+                    modifier = Modifier.fillMaxWidth(),
+                    message = state.CategoryListMessage,
+                    icon = ImageVector.vectorResource(R.drawable.caution),
+                    iconmodifier = Modifier.size(45.dp)
                 )
             }
         }else {
-            Text("No Coins Found in this category" , style = TextStyle(fontSize = 18.sp , color = Color.White , fontFamily = HeadingFont , fontWeight = FontWeight.Bold))
+            CircularProgressIndicator(
+                modifier = Modifier.size(50.dp),
+                color = BrandColor
+            )
         }
     }
 }
@@ -277,7 +294,10 @@ fun ExploreCoinCard(coin : GekoCoin? = GekoCoin(
     symbol = "BTC",
     currentPrice = 10.0035,
     priceChangePercentage24h = -2.0
-), modifier: Modifier = Modifier ){
+), modifier: Modifier = Modifier ,
+                    opencard : (String) -> Unit
+                    ){
+
         coin?.priceChangePercentage24h?.let { it ->
             val Redcolorstops = arrayOf(
                 0.02f to Color.Red.copy(alpha = 0.05f),
@@ -303,6 +323,10 @@ fun ExploreCoinCard(coin : GekoCoin? = GekoCoin(
                 .background(Color.Transparent, shape = RoundedCornerShape(20.dp))
                 .background(brush = if(it < 0) RedBrush
                 else GreenBrush , shape = RoundedCornerShape(20.dp))
+                .clickable{
+                    if(coin.id !=null)
+                    opencard(coin.id)
+                }
             ){
                 Row(modifier = Modifier.fillMaxWidth()
                     .padding(vertical = 18.dp , horizontal = 18.dp),
@@ -331,7 +355,7 @@ fun ExploreCoinCard(coin : GekoCoin? = GekoCoin(
                             modifier = Modifier.padding(bottom = 7.dp)
                         )
                         val number = it
-                        Text(text = "${String.format("%.2f", number).toDouble()}%",
+                        Text(text = "${String.format("%.2f", number)}%",
                             style = TextStyle(color = if(it < 0 ) Color.Red
                             else Color.Green, fontSize = 15.sp , fontWeight = FontWeight.Bold , fontFamily = BodyFont)
                         )
@@ -340,6 +364,7 @@ fun ExploreCoinCard(coin : GekoCoin? = GekoCoin(
             }
     }
 }
+
 @Composable
 fun SearchCoinCard(coin : SearchCoin
 , modifier: Modifier = Modifier ){

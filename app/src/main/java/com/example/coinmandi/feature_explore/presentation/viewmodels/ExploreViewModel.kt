@@ -6,10 +6,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.coinmandi.feature_explore.data.remoteds.CoinGekoApi.utils.GekoError
+import com.example.coinmandi.feature_explore.data.remoteds.CoinGekoApi.utils.GekoErrorWithCodeMessage
 import com.example.coinmandi.feature_explore.data.remoteds.CoinGekoApi.utils.GekoResult
 import com.example.coinmandi.feature_explore.domain.model.GekoCoin
 import com.example.coinmandi.feature_explore.domain.model.GekoSearch
-import com.example.coinmandi.feature_explore.domain.model.SearchCoin
 import com.example.coinmandi.feature_explore.domain.model.TrendingCoins
 import com.example.coinmandi.feature_explore.domain.usecases.GetCoinsUC
 import com.example.coinmandi.feature_explore.domain.usecases.GetTrendingListUC
@@ -34,19 +35,31 @@ class ExploreViewModel(
     private val searchCoin : SearchCoinUC
 ) : ViewModel() {
 
-    private val _PageState : MutableState<ExplorePageState> = mutableStateOf(ExplorePageState())
+    private val _PageState : MutableState<ExplorePageState> = mutableStateOf(ExplorePageState(
+        TrendingListLoading = true,
+        CategoryListLoading = true
+    ))
     val PageState : State<ExplorePageState> = _PageState
 
     fun GetCategoryCoins(category : SelectedCategoryState) = viewModelScope.launch {
         Log.d("GEKO" , "Getting Rwa Coins from CoinGeko")
         _PageState.value = _PageState.value.copy( CategoryListLoading = true )
-        val Gekoresult = getCoins.invoke(category = category.categoryid)
-        when(Gekoresult){
+        val gekoresult = getCoins.invoke(category = category.categoryid)
+        when(gekoresult){
             is GekoResult.Failed<*> -> {
-                Log.d("GEKO" , "${Gekoresult.Error}")
+                Log.d("GEKO" , "${gekoresult.Error}")
+                when(val error = gekoresult.Error){
+                    is GekoErrorWithCodeMessage -> {
+                        _PageState.value = _PageState.value.copy(
+                            CategoryListLoading = false,
+                            CategoryListMessage = "${error.message}"
+                        )
+                    }
+                    else -> Unit
+                }
             }
             is GekoResult.Success<List<GekoCoin>> -> {
-                     val body = Gekoresult.Data
+                     val body = gekoresult.Data
                      if(body !=null && body.isNotEmpty()){
                          _PageState.value = _PageState.value.copy(
                              SelectedCategory = category,
@@ -54,7 +67,10 @@ class ExploreViewModel(
                              CategoryListLoading = false
                          )
                      }else {
-                         Log.d("GEKO" , "No Real World Coins Available in the Market")
+                         _PageState.value = _PageState.value.copy(
+                             CategoryListLoading = false,
+                             CategoryListMessage = "No ${category.catergoryname} coins Available in the Market"
+                         )
                      }
             }
         }
@@ -68,6 +84,15 @@ class ExploreViewModel(
         when(gekoresult){
             is GekoResult.Failed<*> -> {
                 Log.d("GEKO" , "${gekoresult.Error}")
+                when(val error = gekoresult.Error){
+                    is GekoErrorWithCodeMessage -> {
+                        _PageState.value = _PageState.value.copy(
+                            TrendingListLoading = false,
+                            TrendingListMessage = "${error.message}"
+                        )
+                    }
+                    else -> Unit
+                }
             }
             is GekoResult.Success<TrendingCoins> -> {
                 val body = gekoresult.Data
@@ -78,7 +103,7 @@ class ExploreViewModel(
                            TrendingList = body
                        )
                 }else {
-                    Log.d("GEKO" , "No Real World Coins Available in the Market")
+                    Log.d("GEKO" , "No Updates in the Market ")
                 }
             }
         }
@@ -103,9 +128,8 @@ class ExploreViewModel(
             .distinctUntilChanged()
             .debounce(500L)
             .collectLatest { searchQuery ->
-                if(searchQuery == previousString){
-
-                }else {
+                if(searchQuery == previousString){ }
+                else {
                     Log.d("GEKO" , "Reacting from ObserveSeaachText")
                     if(searchQuery.length < 3 || searchQuery.isBlank() )
                         _searchResult.value = _searchResult.value.copy(

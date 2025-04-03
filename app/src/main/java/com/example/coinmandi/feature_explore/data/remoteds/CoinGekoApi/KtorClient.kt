@@ -33,7 +33,6 @@ class KtorClient {
                 override fun log(message: String) {
                     println("MYCUSTOMLOG : $message")
                 }
-
             }
         }
         defaultRequest {

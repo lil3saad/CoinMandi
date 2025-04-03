@@ -7,8 +7,10 @@ data class ExplorePageState(
      val UserSearchText : String = "",
      val TrendingListLoading : Boolean = false,
      val TrendingList : TrendingCoins? = null,
-     val CategoryListLoading : Boolean = false,
+     val TrendingListMessage : String? = null,
      val IsCateogoryMenuVisible : Boolean = false,
      val SelectedCategory : SelectedCategoryState? = null,
-     val CategoryList : List<GekoCoin>? = null
+     val CategoryList : List<GekoCoin>? = null,
+     val CategoryListLoading : Boolean = false,
+     val CategoryListMessage : String? = null
 )
